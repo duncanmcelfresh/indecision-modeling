@@ -369,12 +369,6 @@ def generate_filepath(output_dir, name, extension):
     output_string = (name + "_%s." + extension) % timestr
     return os.path.join(output_dir, output_string)
 
-
-class MyNamespace:
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
-
-
 def custom_optimize(
     obj_func,
     search_space,

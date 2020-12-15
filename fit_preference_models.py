@@ -7,9 +7,7 @@ from ax import ParameterType, RangeParameter, SearchSpace, ChoiceParameter
 from scipy.special import softmax
 from sklearn.neural_network import MLPClassifier
 
-from ax.service.managed_loop import optimize
-
-from utils import get_logger, MyNamespace, custom_optimize
+from utils import get_logger, custom_optimize
 
 MIN_M = 0.0
 MAX_M = 10.0
@@ -25,7 +23,6 @@ SCORE_MODEL_NAMES = [
 
 OTHER_MODEL_NAMES = [
     "simple_logit",
-    # "model_mixture",
     "voter_mixture",
     "uniform_voter_mixture",
     "ann_classifier",
