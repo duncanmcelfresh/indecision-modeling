@@ -1,6 +1,6 @@
 # run group model-fitting experiments, using only strict responses
 
-from fit_preference_models import optimize_parameters, calculate_ll, optimize_parameters_strict, calculate_ll_strict
+from fit_preference_models import optimize_parameters_strict, calculate_ll_strict
 from utils import (
     get_logger,
     generate_filepath,
@@ -28,7 +28,6 @@ def experiment(args):
                 raise Exception("model name {name} not recognized")
             fit_model_list.append(name)
 
-
     if fit_model_list == []:
         logger.info("no model names provided. running random baselines only")
 
@@ -44,9 +43,7 @@ def experiment(args):
     assert train_queries_by_user.keys() == test_queries_by_user.keys()
 
     # generate output file
-    output_file = generate_filepath(
-        args.output_dir, f"strict_individual_expt", "csv"
-    )
+    output_file = generate_filepath(args.output_dir, f"strict_individual_expt", "csv")
     logger.info("generating output file: {}".format(output_file))
 
     # list of output column names
@@ -109,10 +106,14 @@ def experiment(args):
         fixed_probs = {1: 0.5, -1: 0.5}
 
         # re-evaluate model parameters, just to be sure...
-        train_ll = calculate_ll_strict(train_queries, "fixed_rand", None, fixed_probs=fixed_probs)
+        train_ll = calculate_ll_strict(
+            train_queries, "fixed_rand", None, fixed_probs=fixed_probs
+        )
 
         # calculate test ll on expert queries
-        test_ll = calculate_ll_strict(test_queries, "fixed_rand", None, fixed_probs=fixed_probs)
+        test_ll = calculate_ll_strict(
+            test_queries, "fixed_rand", None, fixed_probs=fixed_probs
+        )
 
         result_str = (DELIMITER.join(len(col_list) * ["{}"]) + "\n").format(
             user_id,
@@ -174,10 +175,7 @@ def get_parser():
     )
 
     parser.add_argument(
-        "--start-user",
-        type=int,
-        help="user to start at",
-        default=0,
+        "--start-user", type=int, help="user to start at", default=0,
     )
 
     parser.add_argument(
@@ -214,9 +212,7 @@ if __name__ == "__main__":
     if args.DEBUG:
         # fixed set of parameters, for debugging:
 
-        arg_str = "--data-filename " + os.path.join(
-            os.getcwd(), "data", "nocf.csv"
-        )
+        arg_str = "--data-filename " + os.path.join(os.getcwd(), "data", "nocf.csv")
         arg_str += " --output-dir " + os.path.join(os.getcwd(), "output")
         arg_str += " --num-training-users -1"
         arg_str += " --test-question-frac 0.5"

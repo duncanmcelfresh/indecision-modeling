@@ -481,180 +481,7 @@ def optimize_parameters(
         # learn a individual model for each voter in the dataset (no train/test split),
         # by training a score-based model for each and selecting that with the best train ll
 
-        raise NotImplemented("needs to be updated, to use custom_optimize()")
-        #
-        # logger.info(f"learning {len(user_query_indices)} voter models...")
-        # # learn a model for each user
-        #
-        # tmp_args = MyNamespace(num_ax_trials=args.num_submodel_ax_trials,)
-        #
-        # user_models = []
-        # for user_inds in user_query_indices:
-        #     user_queries = [q for i, q in enumerate(answered_queries) if i in user_inds]
-        #
-        #     # learn one of each model class
-        #     best_model = ""
-        #     best_parameters = []
-        #     best_ll = -1e10
-        #     for m_name in SCORE_MODEL_NAMES:
-        #         model_ll, model_params = optimize_parameters(
-        #             user_queries, m_name, tmp_args
-        #         )
-        #         # re-evaluate model parameters, just to be sure...
-        #         new_ll = calculate_ll(user_queries, m_name, model_params)
-        #         if new_ll > best_ll:
-        #             best_model = m_name
-        #             best_parameters = model_params
-        #             best_ll = new_ll
-        #
-        #     user_models.append(
-        #         {"model_name": best_model, "parameters": best_parameters}
-        #     )
-        #
-        # # get a list of all params
-        # model_name_list = [user["model_name"] for user in user_models]
-        # u_vec_list = [user["parameters"][:-1] for user in user_models]
-        # lam_list = [user["parameters"][-1] for user in user_models]
-        #
-        # # now learn a mixture of these voter models, using regularized "importance" parameters
-        # # define a list of s_func and f_func handles
-        # s_func_map = {}
-        # f_func_map = {}
-        # for m_name in SCORE_MODEL_NAMES:
-        #     s_func, f_func, _, _ = get_score_functions(m_name, 0, 0, eps, num_features)
-        #     s_func_map[m_name] = s_func
-        #     f_func_map[m_name] = f_func
-        #
-        # # get a list of all function handles
-        # s_func_user_list = [s_func_map[m_name] for m_name in model_name_list]
-        # f_func_user_list = [f_func_map[m_name] for m_name in model_name_list]
-        #
-        # # magnitude of l2 regularization
-        # alpha = 0.1
-        #
-        # # learn a mixture of (fixed) agent models
-        # def calc_ll(params):
-        #     # agent importance
-        #     m_list = [params[f"m_{i}"] for i in range(len(user_models))]
-        #     m_softmax = softmax(m_list)
-        #
-        #     # report the sum ll over all samples.
-        #
-        #     ll_list = (
-        #         [
-        #             np.log(
-        #                 sum(
-        #                     m_softmax[i]
-        #                     * np.exp(
-        #                         s_func_user_list[i](q.item_A, q.item_B, u_vec_list[i])
-        #                     )
-        #                     / (
-        #                         np.exp(
-        #                             s_func_user_list[i](
-        #                                 q.item_A, q.item_B, u_vec_list[i]
-        #                             )
-        #                         )
-        #                         + np.exp(
-        #                             s_func_user_list[i](
-        #                                 q.item_B, q.item_A, u_vec_list[i]
-        #                             )
-        #                         )
-        #                         + np.exp(
-        #                             f_func_user_list[i](
-        #                                 q.item_A, q.item_B, u_vec_list[i], lam_list[i],
-        #                             )
-        #                         )
-        #                     )
-        #                     for i in range(len(user_models))
-        #                 )
-        #             )
-        #             for q in queries_r1
-        #         ]
-        #         + [
-        #             np.log(
-        #                 sum(
-        #                     m_softmax[i]
-        #                     * np.exp(
-        #                         s_func_user_list[i](q.item_B, q.item_A, u_vec_list[i])
-        #                     )
-        #                     / (
-        #                         np.exp(
-        #                             s_func_user_list[i](
-        #                                 q.item_A, q.item_B, u_vec_list[i]
-        #                             )
-        #                         )
-        #                         + np.exp(
-        #                             s_func_user_list[i](
-        #                                 q.item_B, q.item_A, u_vec_list[i]
-        #                             )
-        #                         )
-        #                         + np.exp(
-        #                             f_func_user_list[i](
-        #                                 q.item_A, q.item_B, u_vec_list[i], lam_list[i],
-        #                             )
-        #                         )
-        #                     )
-        #                     for i in range(len(user_models))
-        #                 )
-        #             )
-        #             for q in queries_rm1
-        #         ]
-        #         + [
-        #             np.log(
-        #                 sum(
-        #                     m_softmax[i]
-        #                     * np.exp(
-        #                         f_func_user_list[i](
-        #                             q.item_A, q.item_B, u_vec_list[i], lam_list[i]
-        #                         )
-        #                     )
-        #                     / (
-        #                         np.exp(
-        #                             s_func_user_list[i](
-        #                                 q.item_A, q.item_B, u_vec_list[i]
-        #                             )
-        #                         )
-        #                         + np.exp(
-        #                             s_func_user_list[i](
-        #                                 q.item_B, q.item_A, u_vec_list[i]
-        #                             )
-        #                         )
-        #                         + np.exp(
-        #                             f_func_user_list[i](
-        #                                 q.item_A, q.item_B, u_vec_list[i], lam_list[i],
-        #                             )
-        #                         )
-        #                     )
-        #                     for i in range(len(user_models))
-        #                 )
-        #             )
-        #             for q in queries_r0
-        #         ]
-        #     )
-        #
-        #     return {"ll": (np.sum(ll_list) - alpha * np.linalg.norm(m_list), 0,)}
-        #
-        # parameter_dict_list = [
-        #     {"name": f"m_{i}", "type": "range", "bounds": [MIN_M, MAX_M]}
-        #     for i in range(len(user_models))
-        # ]
-        #
-        # best_parameters, values, experiment, model = optimize(
-        #     parameters=parameter_dict_list,
-        #     objective_name="ll",
-        #     total_trials=args.num_ax_trials,
-        #     evaluation_function=calc_ll,
-        #     minimize=False,
-        # )
-        #
-        # best_ll = values[0]["ll"]
-        # best_params = {
-        #     "m_list": [best_parameters[f"m_{i}"] for i in range(len(user_models))],
-        #     "voter_model_names": model_name_list,
-        #     "u_vec_list": u_vec_list,
-        #     "lam_list": lam_list,
-        # }
-        # return best_ll, best_params
+        raise NotImplemented("needs to be updated to use custom_optimize()")
 
     elif model_name == "uniform_voter_mixture":
         # learn a individual model for each voter in the dataset (no train/test split),
@@ -1114,7 +941,11 @@ def optimize_parameters_strict(
         ]
 
         search_space = SearchSpace(
-            parameters=u_vec_params + lam_params + model_name_params + importance_params + q_params
+            parameters=u_vec_params
+            + lam_params
+            + model_name_params
+            + importance_params
+            + q_params
         )
 
         best_parameters, best_ll = custom_optimize(
@@ -1517,7 +1348,7 @@ def get_score_functions(model_name, max_util, max_abs_diff, eps, num_features):
     if model_name == "min_like":
 
         # define a range of lambda values
-        min_lam = - max_util - eps
+        min_lam = -max_util - eps
         max_lam = max_util + eps
 
         def s_func(item_A, item_B, u):
@@ -1529,7 +1360,7 @@ def get_score_functions(model_name, max_util, max_abs_diff, eps, num_features):
     if model_name == "max_like":
 
         # define a range of lambda values
-        min_lam = - max_util - eps
+        min_lam = -max_util - eps
         max_lam = max_util + eps
 
         def s_func(item_A, item_B, u):
@@ -1543,7 +1374,7 @@ def get_score_functions(model_name, max_util, max_abs_diff, eps, num_features):
     if model_name == "dom":
 
         # define a range of lambda values
-        min_lam = - max_abs_diff - eps
+        min_lam = -max_abs_diff - eps
         max_lam = max_abs_diff + eps
 
         def s_func(item_A, item_B, u):

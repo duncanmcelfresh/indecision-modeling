@@ -140,7 +140,7 @@ def experiment(args):
         )
 
         # calculate test ll
-        test_ll = 0
+        rand_test_ll = 0
         if args.num_test_samples > 0:
             rand_test_ll = calculate_ll(
                 test_queries, "fixed_rand", None, fixed_probs=fixed_probs
@@ -180,7 +180,7 @@ def experiment(args):
         )
 
         # calculate test ll
-        test_ll = 0
+        rand_test_ll = 0
         if args.num_test_samples > 0:
             rand_test_ll = calculate_ll(
                 test_queries, "fixed_rand", None, fixed_probs=fixed_probs
@@ -280,25 +280,3 @@ if __name__ == "__main__":
         args = parser.parse_args(arg_str.split())
 
     experiment(args)
-    #
-    # data_filename = os.path.join(os.getcwd(), "data", "clean-data-all-e.csv")
-    #
-    # user_query_dict = read_data_to_user_query_lists(data_filename, normalize_features=True)
-    #
-    # user_ids = list(user_query_dict.keys())
-    #
-    # num_flips = {
-    #     uid: len([q for q in user_query_dict[uid] if q.response == 0])
-    #     for uid in user_ids
-    # }
-    #
-    # final_user_ids = [u for u in user_ids if (num_flips[u] > 0) and (num_flips[u] < 40)]
-    #
-    # uid = final_user_ids[5]
-    # queries = user_query_dict[uid]
-    #
-    # print(f"user: {uid}")
-    # print(f"number of coin flips: {len([q for q in queries if q.response == 0])}")
-    #
-    # optimize_parameters(queries, "min_diff", num_u_points=10, num_lam_points=10)
-    # optimize_parameters(queries, "max_diff", num_u_points=10, num_lam_points=10)

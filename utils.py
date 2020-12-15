@@ -4,7 +4,6 @@ import os
 import time
 
 from ax import Models, SimpleExperiment
-from ax.modelbridge import get_sobol
 
 from preference_classes import Query, Item
 import pandas as pd
@@ -334,7 +333,6 @@ def read_queries_strict(
         return train_queries, test_queries_by_user, test_user_queries
     else:
         return train_queries, test_queries, test_user_queries
-
 
 
 def generate_random_point_nsphere(n, rs=None):

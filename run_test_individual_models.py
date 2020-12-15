@@ -1,6 +1,6 @@
 # run group model-fitting experiments
 
-from fit_preference_models import optimize_parameters, calculate_ll, OTHER_MODEL_NAMES
+from fit_preference_models import optimize_parameters, calculate_ll
 from utils import (
     get_logger,
     generate_filepath,

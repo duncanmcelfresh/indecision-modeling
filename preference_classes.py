@@ -4,8 +4,6 @@
 # Agent : a decision-maker.
 # Query : a pairwise comparison between two Items.
 
-import itertools
-
 import numpy as np
 
 
@@ -29,15 +27,6 @@ class Item(object):
 
         for i, f in enumerate(self.features):
             print("%d: %s" % (i, str(f)))
-
-    @classmethod
-    def random(cls, num_features, id, rs, sphere_size=1.0):
-        # generate a random item, with features uniformly drawn from the num_features-dimensional sphere
-        # rs (optional) : provide a random state
-
-        x = sphere_size * generate_random_point_nsphere(num_features, rs=rs)
-
-        return cls(x, id)
 
 
 class Query(object):
@@ -341,17 +330,3 @@ def generate_items(num_features, num_items, item_sphere_size=None, seed=None):
         Item.random(num_features, id, rs, sphere_size=item_sphere_size)
         for id in range(num_items)
     ]
-
-
-def generate_items_and_queries(
-    num_features, num_items, item_sphere_size=None, seed=None
-):
-
-    items = generate_items(
-        num_features, num_items, item_sphere_size=item_sphere_size, seed=seed
-    )
-
-    # enumerate all queries
-    all_queries = [Query(a, b) for a, b in itertools.combinations(items, 2)]
-
-    return items, all_queries

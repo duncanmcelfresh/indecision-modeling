@@ -10,8 +10,6 @@ from fit_preference_models import SCORE_MODEL_NAMES
 import argparse
 import os
 
-import numpy as np
-
 logger = get_logger()
 
 DELIMITER = ";"
